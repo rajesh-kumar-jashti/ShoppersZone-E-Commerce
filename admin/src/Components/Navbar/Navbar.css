@@ -1,0 +1,20 @@
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 100px;
+    box-shadow: 0 1px 3px -2px #000;
+    background: white;
+}
+.navbar span{
+    font-size: 12px;
+    color: rgb(186, 0, 0);
+    padding-left: 10px;
+}
+.navbar img{
+    height: 45px;
+}
+.navbar h1{
+    font-size: 24px;
+    font-weight: 700;
+}
