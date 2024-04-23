@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <div className='navbar'>
         <h1>SHOPPERS ZONE<span>Admin</span></h1>
-        <img src={navProfile} alt="" />
+        <img src={navProfile} style={{height:'35px'}} alt="" /> 
     </div>
   )
 }

@@ -51,3 +51,10 @@
     font-weight: 600;
     cursor: pointer;
 }
+.frgt-pass{
+    margin-top: 10px;
+    margin-left: 75px;
+}
+.frgt-pass p{
+    font-size: 14px;
+}

@@ -15,14 +15,10 @@
     "hamburger-react": "^2.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-<<<<<<< HEAD
-    "react-router-dom": "^6.22.0",
-    "react-scripts": "^5.0.1",
-=======
     "react-router-dom": "^6.22.3",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
+    "react-step-progress-bar": "^1.0.3",
     "react-toastify": "^10.0.5",
->>>>>>> 568581e (latest)
     "web-vitals": "^2.1.4"
   },
   "scripts": {

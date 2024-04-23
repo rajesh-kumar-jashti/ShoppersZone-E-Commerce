@@ -14,6 +14,8 @@ import AllProducts from './Components/AllProducts/AllProducts';
 import WishList from './Components/WishList/WishList';
 import About from './Components/About/About';
 import Contact from './Components/Contact/Contact';
+import PageTwo from './Components/Stepper/PageTwo/PageTwo';
+import ForgotPassword from './Components/Forgot_Passwd/ForgotPassword';
 // import Admin from '../../admin/src/Pages/Admin/Admin';
 
 function App() {
@@ -46,6 +48,7 @@ function App() {
           <Route path='/contact' element={<Contact/>} />
           {/* <Route path='/seller-login' element={<Admin/>} /> */}
           <Route path='/login' element={<LoginSignup/>} />
+          <Route path='/forgot-pwd' element={<ForgotPassword/>} />
         </Routes>
     </div>
   );

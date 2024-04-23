@@ -12,7 +12,7 @@ const Footer = () => {
             <p>SHOPPERS ZONE</p>
         </div>
         <ul className='footer-links'>
-            <li><NavLink style={{textDecoration: 'none', color: 'black'}} to='/seller-login'>Be a Seller</NavLink></li>
+            <li><NavLink style={{textDecoration: 'none', color: 'black'}} to='http://localhost:5173/'>Be a Seller</NavLink></li>
             <li><NavLink style={{textDecoration: 'none', color: 'black'}} to='/'>Shop</NavLink></li>
             <li><NavLink style={{textDecoration: 'none', color: 'black'}} to='/contact'>Contact</NavLink></li>
             <li><NavLink style={{textDecoration: 'none', color: 'black'}} to='/about'>About</NavLink></li>

@@ -4,10 +4,13 @@ import star_icon from '../Assets/star_icon.png'
 import star_dull_icon from '../Assets/star_dull_icon.png'
 import Footer from '../Footer/Footer'
 import { ShopContext } from '../../Context/ShopContext'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDisplay = (props) => {
     const {product} = props;
     const {addToCart, addTowishList} = useContext(ShopContext);
+
 
   return (
     <>

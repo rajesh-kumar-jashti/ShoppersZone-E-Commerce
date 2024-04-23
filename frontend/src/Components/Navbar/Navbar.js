@@ -49,7 +49,7 @@ const Navbar = () => {
                 :<NavLink to='/login'><button>Login</button></NavLink>}
                 {localStorage.getItem('auth-token')
                 ?<NavLink to=''><img src={profile} style={{height:'35px'}} alt="" /></NavLink>
-                :<NavLink to='/login'><button>Login</button></NavLink>}
+                :""}
             </div>
         </div>
     </div>

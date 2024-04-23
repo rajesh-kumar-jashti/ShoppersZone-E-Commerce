@@ -7,7 +7,7 @@ const multer = require('multer');
 const path = require('path'); 
 const cors = require('cors');
 
-app.use(express.json());
+app.use(express.json())
 app.use(cors());
 
 mongoose.connect('mongodb+srv://rajeshkumar:rajeshkumar123@cluster0.0ebqbcg.mongodb.net/e-commerce')
@@ -153,6 +153,23 @@ const fecthUser = async(req,res,next)=>{
     }
 }
 
+const fecthSeller = async(req,res,next)=>{
+    const token = req.header('auth-token');
+    if(!token){
+        res.status(401).send({errors: "Please authenticate using valid token"})
+    }
+    else{
+        try{
+            const data = jwt.verify(token,'secret_ecom');
+            req.seller = data.seller;
+            next();
+        }catch(error){
+            res.status(401).send({errors: "Please authenticate using valid token"})
+        }
+    }
+}
+
+
 app.post('/addtocart',fecthUser,async (req,res)=>{
     let userData = await Users.findOne({_id: req.user.id});
     userData.cartData[req.body.itemId]+=1;
@@ -190,6 +207,7 @@ app.post('/removefromwishlist', fecthUser, async (req,res)=>{
     await Users.findOneAndUpdate({_id: req.user.id},{wishListData: userData.wishListData})
     res.send("removed");
 })
+
 
 app.post('/getwishlist', fecthUser, async(req,res)=>{
     console.log("GetCart");
@@ -238,6 +256,30 @@ const Sellers = mongoose.model('Sellers',{
     }
 }) 
 
+
+const FormSchema = new mongoose.Schema({
+    username: String,
+    phoneNumber: String,
+    address: String,
+    paymentMethod: String,
+    productData: Object
+  });
+  
+const FormModel = mongoose.model('Form', FormSchema);
+
+app.post('/orders', async (req, res) => {
+    try {
+      const formData = req.body;
+      const formEntry = new FormModel(formData);
+      await formEntry.save();
+      res.status(200).send('Form data saved successfully');
+    } catch (error) {
+      console.error('Error saving form data:', error);
+      res.status(500).send('Internal server error');
+    }
+  });
+  
+
 app.post('/signup',async (req,res)=>{
     let check = await Users.findOne({email: req.body.email});
     if(check){
@@ -270,6 +312,29 @@ app.post('/signup',async (req,res)=>{
     res.json({success:true, token})
 })
 
+
+app.post('/seller-signup',async (req,res)=>{
+    let check = await Sellers.findOne({email: req.body.email});
+    if(check){
+        return res.status(400).json({success: false, errors: "Existing user found with same email"});
+    }
+    const seller = new Sellers({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+    })
+
+    await seller.save();
+
+    const data = {
+        seller: {
+            id: seller.id
+        }
+    }
+    const token = jwt.sign(data,'secret_ecom');
+    res.json({success:true, token})
+})
+
 app.post('/login',async (req,res)=>{
     let user = await Users.findOne({email: req.body.email});
     if(user){
@@ -292,6 +357,51 @@ app.post('/login',async (req,res)=>{
         res.json({success:false,errors: "Wrong Email ID"})
     }
 })
+
+app.post('/update-password', async (req, res) => {
+    try {
+      const email = req.body.email;
+      const newPassword = req.body.newPassword;
+  
+      const user = await Users.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      user.password = newPassword;
+      await user.save();
+  
+      return res.status(200).json({ message: 'Password updated successfully' });
+    } catch (error) {
+      console.error('Error updating password:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+app.post('/seller-login',async (req,res)=>{
+    let seller = await Sellers.findOne({email: req.body.email});
+    if(seller){
+        const passCmp = req.body.password === seller.password;
+        if(passCmp){
+            const data = {
+                seller:{
+                    id: seller.id
+                }
+            }
+
+            const token = jwt.sign(data,'secret_ecom');
+            res.json({success:true, token});
+        }
+        else{
+            res.json({success:false, errors: "Wrong Password"});
+        }
+    }
+    else{
+        res.json({success:false,errors: "Wrong Email ID"})
+    }
+})
+
 
 app.listen(port, (error)=>{
     if(!error){
