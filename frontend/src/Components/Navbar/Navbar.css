@@ -227,3 +227,11 @@ body{
       margin-top: 22px;
     }
   }
+
+
+  .profile-dropdown {
+    position: relative;
+}
+.profile-dropdown:hover .dropdown-content {
+  display: block;
+}

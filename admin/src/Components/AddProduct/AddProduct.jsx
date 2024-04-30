@@ -83,10 +83,10 @@ const AddProduct = () => {
             <p>Product Type</p>
             {(productDetails.category === "women")?
                 <select value={productDetails.type} onChange={changeHandler} name="type" className='add-product-selector' >
-                    <option value="topwear">Sarees</option>
-                    <option value="bottomwear">Kurtas & Sets</option>
-                    <option value="footwear">Tops & Tees</option>
-                    <option value="accessories">Shoes</option>
+                    <option value="sarees">Sarees</option>
+                    <option value="kurtas&sets">Kurtas & Sets</option>
+                    <option value="tops&tees">Tops & Tees</option>
+                    <option value="shoes">Shoes</option>
                 </select>
             :<select value={productDetails.type} onChange={changeHandler} name="type" className='add-product-selector' >
                 <option value="topwear">Topwear</option>

@@ -6,16 +6,22 @@ import { Squash as Hamburger } from 'hamburger-react'
 import wishlist_icon from '../Assets/wishlist_icon.png'
 import profile from '../Assets/profile.png'
 import { ShopContext } from '../../Context/ShopContext'
+import DropDown from '../DropDown/DropDown'
 
 const Navbar = () => {
     const [menu, setMenu] = useState("shop")
     const [showNavbar, setShowNavbar] = useState(false)
-
+    const [showDropdown, setShowDropdown] = useState(false);
     const {getTotalCartITems} = useContext(ShopContext);
 
     const handleShowNavbar = () => {
         setShowNavbar(!showNavbar)
     }
+
+    const handleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
+
 
   return (
     <div className='navbar'>
@@ -48,7 +54,10 @@ const Navbar = () => {
                 ?<button onClick={()=>{localStorage.removeItem('auth-token');window.location.replace('/')}}>Logout</button>
                 :<NavLink to='/login'><button>Login</button></NavLink>}
                 {localStorage.getItem('auth-token')
-                ?<NavLink to=''><img src={profile} style={{height:'35px'}} alt="" /></NavLink>
+                ?(<div className="profile-dropdown" onClick={handleDropdown}>
+                    <img src={profile} style={{height:'35px'}} alt="" />
+                    {showDropdown && <DropDown/>}
+                </div>)
                 :""}
             </div>
         </div>

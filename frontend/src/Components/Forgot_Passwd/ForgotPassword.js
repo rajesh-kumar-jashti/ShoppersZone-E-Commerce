@@ -1,49 +1,79 @@
-import React from 'react'
-import { useState } from 'react'
-import './forgotPassword.css'
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import './forgotPassword.css';
 
 const ForgotPassword = () => {
-
+  const { email } = useParams();
+  
     const [formData, setFormData] = useState({
+        email: email,
         newPassword: "",
         confirmPassword: ""
-      })
+    });
+    const [passwordsMatch, setPasswordsMatch] = useState(true);
 
-    const UpdatePassword = async () =>{
-        console.log("SignUp",formData);
-        let responseData;
-        await fetch('http://localhost:4000//update-password',{
-          method: 'POST',
-          headers: {
-            Accept: 'application/form-data',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formData),
-        }).then((response)=>response.json()).then((data)=>responseData=data)
-        if(responseData.success){
-          localStorage.setItem('auth-token', responseData.token);
-          window.location.replace('/');
+    const UpdatePassword = async () => {
+        if (formData.newPassword !== formData.confirmPassword) {
+            setPasswordsMatch(false);
+            return; 
         }
-        else{
-          alert(responseData.errors);
+
+        console.log("UpdatePassword", formData);
+        try {
+            const response = await fetch('http://localhost:4000/update-password', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData),
+            });
+            const responseData = await response.json();
+            if (responseData.success) {
+                window.location.replace('/login');
+            } else {
+                alert('updated successful');
+                window.location.replace('/login');
+            }
+        } catch (error) {
+            console.error('Error updating password:', error);
         }
-      }
-    
-      const changeHandler = (e) =>{
-        setFormData({...formData, [e.target.name]:e.target.value})
-      }
+    };
 
-  return (
-    <div className='forgot-pwd'>
-        <div className="fgpwd-inputs">
-            <input name='newpassword' value={formData.newPassword} onChange={changeHandler} type="password" placeholder='Enter New Password'/>
-            <input name='confirmpassword' value={formData.confirmPassword} onChange={changeHandler} type="password" placeholder='Confirm Password'/>
-        </div>  
-        <div className='fgpwd-button'>
-            <button onClick={()=>{UpdatePassword()}}>Submit</button>
-        </div>    
-    </div>
-  )
-}
+    const changeHandler = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setPasswordsMatch(true);
+    };
 
-export default ForgotPassword
+    return (
+        <div className='forgot-pwd'>
+          <h1 style={{textAlign: "center", paddingTop: "35px", fontSize: "24px", fontFamily: "Poppins", fontWeight: "500"}}>Forgot Password</h1>
+            <div className="fgpwd-inputs">
+                <input
+                    name='newPassword'
+                    value={formData.newPassword}
+                    onChange={changeHandler}
+                    type="password"
+                    placeholder='Enter New Password'
+                />
+                <input
+                    name='confirmPassword'
+                    value={formData.confirmPassword}
+                    onChange={changeHandler}
+                    type="password"
+                    placeholder='Confirm Password'
+                />
+            </div>
+            {!passwordsMatch && (
+                <p style={{ color: 'red', paddingLeft: '80px', fontSize: '14px', paddingTop: '8px' }}>
+                    Passwords do not match!
+                </p>
+            )}
+            <div className='fgpwd-button'>
+                <button onClick={UpdatePassword} style={{cursor: "pointer"}}>Submit</button>
+            </div>
+        </div>
+    );
+};
+
+export default ForgotPassword;

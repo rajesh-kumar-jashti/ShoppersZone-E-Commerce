@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 const Navbar = () => {
   return (
     <div className='navbar'>
-        <NavLink to='/' style={{textDecoration:"none", color:"#333"}}><h1>SHOPPERS ZONE<span>Admin</span></h1></NavLink>
+        <NavLink to='/admin' style={{textDecoration:"none", color:"#333"}}><h1>SHOPPERS ZONE<span>Seller</span></h1></NavLink>
         <div>
           {localStorage.getItem('auth-token')
             ?<div className='navbar-logout'>

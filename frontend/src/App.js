@@ -16,6 +16,7 @@ import About from './Components/About/About';
 import Contact from './Components/Contact/Contact';
 import PageTwo from './Components/Stepper/PageTwo/PageTwo';
 import ForgotPassword from './Components/Forgot_Passwd/ForgotPassword';
+import Orders from './Components/Orders/Orders';
 // import Admin from '../../admin/src/Pages/Admin/Admin';
 
 function App() {
@@ -32,6 +33,10 @@ function App() {
           <Route path='/men/footwear' element={<Topwear category="men" type="footwear"/>} />
           <Route path='/men/accessories' element={<Topwear category="men" type="accessories"/>} />
           <Route path='/women' element={<ShopCategory banner={women_banner} category="women"/>}/>
+          <Route path='/women/sarees' element={<Topwear category="women" type="sarees"/>} />
+          <Route path='/women/shoes' element={<Topwear category="women" type="shoes"/>} />
+          <Route path='/women/kurtas&sets' element={<Topwear category="women" type="kurtas&sets"/>} />
+          <Route path='/women/tops&tees' element={<Topwear category="women" type="tops&tees"/>} />
           <Route path='/women/allproducts' element={<AllProducts category="women" />} />
           <Route path='/kids' element={<ShopCategory banner={kids_banner} category="kids"/>}/>
           <Route path='/kids/allproducts' element={<AllProducts category="kids" />} />
@@ -48,7 +53,9 @@ function App() {
           <Route path='/contact' element={<Contact/>} />
           {/* <Route path='/seller-login' element={<Admin/>} /> */}
           <Route path='/login' element={<LoginSignup/>} />
-          <Route path='/forgot-pwd' element={<ForgotPassword/>} />
+          <Route path='/forgot-pwd/:email' element={<ForgotPassword/>} />
+          <Route path='/orders' element={<Orders/>} />
+          <Route path='/profile' element={<Orders/>} />
         </Routes>
     </div>
   );

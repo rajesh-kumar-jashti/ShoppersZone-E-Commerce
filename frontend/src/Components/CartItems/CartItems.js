@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import './CartItems.css'
 import remove_icon from '../Assets/cart_cross_icon.png'
 import { ShopContext } from '../../Context/ShopContext'
-import loca from "../Assets/maps-and-flags.png"
 
 const CartItems = () => {
   const {getTotalCartAmount,all_product, cartItems, removeFromCart} = useContext(ShopContext);
@@ -27,9 +26,9 @@ const CartItems = () => {
                         <div className="cartitems-format cartItems-format-main">
                             <img src={e.image} alt="" className='carticon-product-icon' />
                             <p className='title'>{e.name}</p>
-                            <p className='price'>${e.new_price}</p>
+                            <p className='price'>₹ {e.new_price}</p>
                             <button className='cartitems-quantity'>{cartItems[e.id]}</button>
-                            <p>${e.new_price*cartItems[e.id]}</p>
+                            <p>₹ {e.new_price*cartItems[e.id]}</p>
                             <img className='cartitems-remove-icon' src={remove_icon} onClick={()=>{removeFromCart(e.id)}} alt='' />
                         </div>
                         <hr />
@@ -45,7 +44,7 @@ const CartItems = () => {
               <h1>Cart Totals</h1>
               <div style={{display:'flex',justifyContent:'space-between'}}>
                 <p>Subtotal</p>
-                <p>${getTotalCartAmount()}</p>
+                <p>₹ {getTotalCartAmount()}</p>
               </div>
               <hr />
               <div style={{display:'flex',justifyContent:'space-between'}}>
@@ -55,7 +54,7 @@ const CartItems = () => {
               <hr/>
               <div style={{display:'flex',justifyContent:'space-between'}}>
                 <h1 className='total'>Total</h1>
-                <h1 className='total'>${getTotalCartAmount()}</h1>
+                <h1 className='total'>₹ {getTotalCartAmount()}</h1>
               </div>
               {/* <button>Proceed to Checkout</button> */}
             </div>

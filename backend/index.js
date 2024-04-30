@@ -6,11 +6,18 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path'); 
 const cors = require('cors');
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
+require("dotenv").config();
+
 
 app.use(express.json())
 app.use(cors());
+app.use(express.urlencoded({ extended: false }));
+
 
 mongoose.connect('mongodb+srv://rajeshkumar:rajeshkumar123@cluster0.0ebqbcg.mongodb.net/e-commerce')
+
 
 app.get('/',(req,res)=>{
     res.send("Express App is Running")
@@ -131,10 +138,19 @@ app.get('/popularinmen',async(req,res)=>{
 })
 
 app.get('/popularinwomen',async(req,res)=>{
-    let products = await Product.find({category:"men"});
+    let products = await Product.find({category:"women"});
     let popular_in_women = products.slice(0,4);
-    console.log("Popular in men Fetched");
+    console.log("Popular in women Fetched");
     res.send(popular_in_women);
+})
+
+
+
+app.get('/popularinkids',async(req,res)=>{
+    let products = await Product.find({category: "kids"});
+    let popular_in_kids = products.slice(0,4);
+    console.log("Popular in kids Fetched");
+    res.send(popular_in_kids);
 })
 
 const fecthUser = async(req,res,next)=>{
@@ -250,27 +266,48 @@ const Sellers = mongoose.model('Sellers',{
     password: {
         type: String,
     },
+    productData: {
+        type: Object,
+    },
     date: {
         type: Date,
         default: Date.now,
     }
 }) 
 
+const Orders = mongoose.model('orders',{
+    username: {
+        type: String,
+    },
+    phoneNumber: {
+        type: String,
+    },
+    address: {
+        type: String,
+    },
+    paymentMethod: {
+        type: String,
+    },
+    productData: {
+        type: Object
+    },
+    date: {
+        type: Date,
+        default: Date.now,
+    }
+}) 
 
-const FormSchema = new mongoose.Schema({
-    username: String,
-    phoneNumber: String,
-    address: String,
-    paymentMethod: String,
-    productData: Object
-  });
-  
-const FormModel = mongoose.model('Form', FormSchema);
+app.get('/totalorders',async(req,res)=>{
+    let orders = await Orders.find({});
+    console.log("Popular in women Fetched");
+    res.send(orders);
+})
+
 
 app.post('/orders', async (req, res) => {
     try {
       const formData = req.body;
-      const formEntry = new FormModel(formData);
+      const formEntry = new Orders(formData);
       await formEntry.save();
       res.status(200).send('Form data saved successfully');
     } catch (error) {
@@ -401,6 +438,48 @@ app.post('/seller-login',async (req,res)=>{
         res.json({success:false,errors: "Wrong Email ID"})
     }
 })
+
+// Payment
+
+app.post("/order", async (req, res) => {
+    try {
+        const razorpay = new Razorpay({
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_SECRET,
+        });
+
+        const options = req.body;
+        const order = await razorpay.orders.create(options);
+
+        if (!order) {
+            return res.status(500).send("Error");
+        }
+
+        res.json(order);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Error");
+    }
+});
+
+app.post("/order/validate", async (req, res) => {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+        req.body;
+
+    const sha = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET);
+    //order_id + "|" + razorpay_payment_id
+    sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+    const digest = sha.digest("hex");
+    if (digest === razorpay_signature) {
+        return res.status(400).json({ msg: "Transaction is not legit!" });
+    }
+
+    res.json({
+        msg: "success",
+        orderId: razorpay_order_id,
+        paymentId: razorpay_payment_id,
+    });
+});
 
 
 app.listen(port, (error)=>{

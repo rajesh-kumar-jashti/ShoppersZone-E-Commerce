@@ -2,6 +2,7 @@ import React from "react";
 import "./PageTwo.css";
 import { useState, useContext } from "react";
 import { ShopContext } from "../../../Context/ShopContext";
+import Footer from "../../Footer/Footer";
 
 
 const PageTwo = ({onButtonClick}) => {
@@ -12,18 +13,34 @@ const PageTwo = ({onButtonClick}) => {
     phoneNumber: '',
     address: '',
     paymentMethod: 'cashOnDelivery', 
-    productData: cartItems
+    productData: cartItems,
+    paymentId: ''
   });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
-    });
+    }));
   };
+  
+  
 
   const Orders = async (e) => {
+
+    if (
+      formData.username.trim() === '' ||
+      formData.phoneNumber.trim() === '' ||
+      formData.address.trim() === '' ||
+      formData.paymentMethod === ''
+    ) {
+      // Alert the user that they need to fill out all required fields
+      alert('Please fill out all required fields.');
+      return; // Exit the function early if any fields are empty
+    }
+    
     try {
       const response = await fetch('http://localhost:4000/orders', {
         method: 'POST',
@@ -36,10 +53,13 @@ const PageTwo = ({onButtonClick}) => {
         throw new Error('Failed to submit form data');
       }
       console.log('Form data submitted successfully');
-      // You can redirect or show a success message here
+      if (formData.paymentMethod === "cashOnDelivery") {
+        onButtonClick("pagefour");
+      } else {
+        onButtonClick("pagethree");
+      }
     } catch (error) {
       console.error('Error submitting form data:', error);
-      // Handle error
     }
   };
 
@@ -49,10 +69,10 @@ const PageTwo = ({onButtonClick}) => {
           <div className='details-container'>
             <h1>Add Details</h1>
             <div className="details-input">
-              <input name="username" value={formData.username} onChange={handleChange}  type="text" placeholder="Enter Name" />
-              <input name="phoneNumber" type="number" value={formData.phoneNumber} onChange={handleChange} placeholder="Phone Number" />
-              <input name="address" value={formData.address} onChange={handleChange} type="text" placeholder="Enter Address" />
-              <select name="paymentmethod" value={formData.paymentMethod} onChange={handleChange} id="">
+              <input name="username" value={formData.username} onChange={handleChange}  type="text" placeholder="Enter Name" required/>
+              <input name="phoneNumber" type="number" value={formData.phoneNumber} onChange={handleChange} placeholder="Phone Number" required/>
+              <input name="address" value={formData.address} onChange={handleChange} type="text" placeholder="Enter Address" required />
+              <select name="paymentMethod" value={formData.paymentMethod} onChange={handleChange}>
                 <option value="cashOnDelivery">Cash on Delivery</option>
                 <option value="onlinePayment">Online Payment</option>
               </select>
@@ -60,9 +80,10 @@ const PageTwo = ({onButtonClick}) => {
           </div>
           <div className="pagetwo-button">
             <button onClick={() => onButtonClick("pageone")}>Previous</button>
-            <button onClick={() => {onButtonClick("pagethree"); Orders()}}>Next</button>
+            <button onClick={() => {Orders()}}>Next</button>
           </div>
         </div>
+        <Footer/>
       </main>
     );
 }

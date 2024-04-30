@@ -3,7 +3,7 @@ import './CSS/Login.css'
 import { NavLink } from 'react-router-dom'
 
 const LoginSignup = () => {
-  const [state,setstate]=useState("Sign Up")
+  const [state,setstate]=useState("Login")
 
   const [formData, setFormData] = useState({
     username: "",
@@ -66,7 +66,7 @@ const LoginSignup = () => {
           <input name='password' value={formData.password} onChange={changeHandler} type="password" placeholder='Password' />
         </div>
         <div className="frgt-pass">
-        {(state==="Sign Up")?"":<NavLink to='/forgot-pwd' style={{textDecoration:"none", color: "#333"}}><p>Forgot Password?</p></NavLink>}
+        {(state==="Sign Up")?"":<NavLink to={`/forgot-pwd/${formData.email}`} style={{textDecoration:"none", color: "#333"}} ><p>Forgot Password?</p></NavLink>}
         </div>
         <button onClick={()=>{state==="Login"?Login():SignUp()}}>Continue</button>
         {(state==="Sign Up")

@@ -19,8 +19,8 @@ const WishList = () => {
                           <img src={e.image} alt="" className='whishlist-image' />
                           <p className='whishlist-name'>{e.name}</p>
                           <div className='wishlist-prices'>
-                            <p className='whishlist-n-price'>${e.new_price}</p>
-                            <p className='whishlist-o-price'>${e.old_price}</p>
+                            <p className='whishlist-n-price'>₹ {e.new_price}</p>
+                            <p className='whishlist-o-price'>₹ {e.old_price}</p>
                           </div>
                           <div className='line'></div>
                           <div className='remove-icon' onClick={()=>{removeFromWishList(e.id)}}>

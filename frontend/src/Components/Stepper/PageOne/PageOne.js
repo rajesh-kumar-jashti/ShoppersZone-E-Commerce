@@ -13,7 +13,7 @@ const PageOne = ({ onButtonClick}) => {
             </div>
             <div className="pageone-button">
               <button style={{cursor: "pointer"}} onClick={() => onButtonClick("pageone")}>Previous</button>
-              <button style={{cursor: "pointer"}} onClick={() => onButtonClick("pagetwo")}>Next</button>
+              <button style={{cursor: "pointer"}} onClick={() => onButtonClick("pagetwo")}>Check Out</button>
             </div>
             <Footer/>
         </div>

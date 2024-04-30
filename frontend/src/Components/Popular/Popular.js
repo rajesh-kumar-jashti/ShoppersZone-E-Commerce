@@ -8,6 +8,8 @@ const Popular = (props) => {
 
   const [popular_in_women,setPopular_in_women] = useState([]);
 
+  const [popular_in_kids,setPopular_in_kids] = useState([]);
+
   useEffect(()=>{
     fetch('http://localhost:4000/popularinmen')
     .then((response)=>response.json())
@@ -20,7 +22,13 @@ const Popular = (props) => {
     .then((data)=>setPopular_in_women(data));
   },[])
 
-  let popular = props.category==='men'?popular_in_men:popular_in_women
+  useEffect(()=>{
+    fetch('http://localhost:4000/popularinkids')
+    .then((response)=>response.json())
+    .then((data)=>setPopular_in_kids(data));
+  },[])
+
+  let popular = props.category==='men'?popular_in_men:(props.category=='women'?popular_in_women:popular_in_kids)
 
   return (
     <div className='popular'>
