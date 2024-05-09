@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
 
-mongoose.connect('mongodb+srv://rajeshkumar:rajeshkumar123@cluster0.0ebqbcg.mongodb.net/e-commerce')
+mongoose.connect('mongodb+srv://rajeshkumar:rajeshkumar123@cluster0.0ebqbcg.mongodb.net/ECommerce')
 
 
 app.get('/',(req,res)=>{
